@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  rw-variables:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: 'Can workflows write variables?'
+        run: |
+          gh variable list
+          VAR="$(gh variable get VAR || true)"
+          echo "current value of VAR='$VAR'"
+          VAR="$RANDOM"
+          echo "setting VAR='$VAR'"
+          gh variable set VAR --body "$VAR"
+        env:
+          GH_TOKEN: ${{ secrets.VAR_PAT }}
+          #GITHUB_TOKEN: ${{ secrets.VAR_PAT }}
